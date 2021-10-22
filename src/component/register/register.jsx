@@ -1,31 +1,46 @@
 // import { axios } from "axios";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [confirmPass, setCornfirmPass] = useState("");
-  const handleSubmit = (e) => {
+  const history=useHistory();
+  async function handleSubmit  (e) {
     e.preventDefault();
     const registarData = {
       name: name,
       email: email,
       pass: pass,
-      confirmPass: confirmPass,
+      // confirmPass: confirmPass,
     };
 
-    if (registarData.name.length === 0) {
-      alert("Name can not be empty");
-    } else if (registarData.email.length === 0) {
-      alert("Email can not be empty");
-    } else if (registarData.pass.length === 0) {
-      alert("Password can not be empty");
-    } else if (registarData.confirmPass.length === 0) {
-      alert("Password can not be empty");
-    } else {
-      console.log("all field valid");
-    }
+
+
+let result=await fetch("http://localhost:8000/api/register",{
+  method:'POST',
+  headers:{
+    "Content-Type":"application/json",
+    "Accept":"application/json"
+  },body:JSON.stringify(registarData)
+})
+result =await result.json();
+console.log("register data", result);
+localStorage.setItem("register data", JSON.stringify(result));
+history.push('/login');
+    // if (registarData.name.length === 0) {
+    //   alert("Name can not be empty");
+    // } else if (registarData.email.length === 0) {
+    //   alert("Email can not be empty");
+    // } else if (registarData.pass.length === 0) {
+    //   alert("Password can not be empty");
+    // } else if (registarData.confirmPass.length === 0) {
+    //   alert("Password can not be empty");
+    // } else {
+    //   console.log("all field valid");
+    // }
 
     // axios
     //   .post("api.dev.bankerja.com/api/v.1/register", registarData)
